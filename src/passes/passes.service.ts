@@ -5,6 +5,17 @@ import * as path from 'path';
 import { promises as fs } from 'node:fs';
 import { PKPass } from 'passkit-generator';
 import * as Utils from 'passkit-generator/lib/utils';
+import {CreatePassBody, SubscriptionPassCreateData} from "./passes.types";
+import {format} from "date-fns/format";
+
+function deepMerge(target, source) {
+  for (const key in source) {
+    if (source[key] instanceof Object && key in target) {
+      Object.assign(source[key], deepMerge(target[key], source[key]));
+    }
+  }
+  return { ...target, ...source };
+}
 
 // ******************************************** //
 // *** CODE FROM GET MODEL FOLDER INTERNALS *** //
@@ -64,10 +75,10 @@ async function readDirectory(filePath: string) {
 // *** EXAMPLE FROM NOW ON *** //
 // *************************** //
 
-const passTemplate = new Promise<PKPass>(async (resolve) => {
+const passTemplate = (mergePassObj?: object) => new Promise<PKPass>(async (resolve) => {
   const modelPath = path.resolve(
     __dirname,
-    `../../src/passes/passModels/examplePass.pass`,
+    `../../src/passes/passModels/subscriptionPass.pass`,
   );
   const [modelFilesList, certificates] = await Promise.all([
     fs.readdir(modelPath),
@@ -94,6 +105,16 @@ const passTemplate = new Promise<PKPass>(async (resolve) => {
     .flat(1)
     .reduce((acc, current) => ({ ...acc, ...current }), {});
 
+
+  // Merge object
+  if (mergePassObj) {
+    const parsedPass = JSON.parse(modelRecords['pass.json'].toString('utf-8'));
+
+    const newPass = deepMerge(parsedPass, mergePassObj);
+
+    modelRecords['pass.json'] = Buffer.from(JSON.stringify(newPass), 'utf-8');
+  }
+
   /** Creating a PKPass Template */
 
   return resolve(
@@ -108,9 +129,80 @@ const passTemplate = new Promise<PKPass>(async (resolve) => {
 
 @Injectable()
 export class PassesService {
+  async createTransportSubscriptionPass(data: SubscriptionPassCreateData): Promise<PKPass> {
+    console.log('data', data)
+    try {
+      const templatePass = await passTemplate({
+        generic: {
+        headerFields: [{
+          "key": "subscriptionType",
+          "label": "Тип",
+          "value": "Test",
+        }],
+        primaryFields: [
+          {
+            "key": "endDate",
+            "label": "Дійсний до",
+            "value": format(data.endDate, 'dd-M-y'),
+          }
+        ],
+        "secondaryFields": [
+          {
+            "key": "number",
+            "label": "Номер",
+            "value": data.number,
+          },
+          {
+            "key": "startDate",
+            "label": "Дата придбання",
+            "value": format(data.startDate, 'dd-M-y'),
+            "textAlignment": "PKTextAlignmentRight"
+          }
+        ],
+        "auxiliaryFields": [
+          {
+            "key": "price",
+            "label": "Вартість",
+            "value": `${data.price} UAH`
+          },
+          {
+            "key": "organization",
+            "label": "Організація",
+            "value": "КП Дніпровський ЕДМР",
+            "textAlignment": "PKTextAlignmentRight"
+          }
+        ]
+      }
+    });
+
+      const pass = await PKPass.from(
+        templatePass,
+        {
+          serialNumber: data.id,
+        }
+      );
+
+      pass.setRelevantDate(new Date(data.endDate));
+
+      if (pass.type === 'boardingPass' && !pass.transitType) {
+        // Just to not make crash the creation if we use a boardingPass
+        pass.transitType = 'PKTransitTypeAir';
+      }
+
+      pass.setBarcodes({
+        message: data.id,
+        format: 'PKBarcodeFormatQR',
+        messageEncoding: 'iso-8859-1',
+      });
+
+      return pass;
+    } catch (error) {
+      throw new Error(`Failed to create pass: ${error.message}`);
+    }
+  }
   async createPass(request): Promise<PKPass> {
     try {
-      const templatePass = await passTemplate;
+      const templatePass = await passTemplate();
 
       const pass = await PKPass.from(
         templatePass,
