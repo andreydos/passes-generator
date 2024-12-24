@@ -1,0 +1,37 @@
+{
+	"formatVersion": 1,
+	"passTypeIdentifier": "pass.com.edinpro.edinpro",
+	"serialNumber": "TEST12",
+	"teamIdentifier": "SV5PS2NJ46",
+	"webServiceURL": "https://ednipro.dp.ua/",
+	"authenticationToken": "some_strange_authenticationToken",
+	"relevantDate": "2025-12-09T13:00-08:00",
+	"locations": [
+		{
+			"latitude": 48.4642711,
+			"longitude": 35.0422936
+		}
+	],
+	"barcodes": [
+	],
+	"organizationName": "eDnipro",
+	"description": "Абонемент на проїзд в транспорті",
+	"foregroundColor": "rgb(255, 255, 255)",
+	"backgroundColor": "rgb(30, 58, 136)",
+    "labelColor": "rgb(129, 145, 188)",
+  "logoText": "Проїзний",
+  "generic": {
+    "headerFields": [
+
+    ],
+    "primaryFields": [
+
+    ],
+    "secondaryFields": [
+
+    ],
+    "auxiliaryFields": [
+
+    ]
+  }
+}
