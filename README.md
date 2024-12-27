@@ -62,6 +62,19 @@ $ npm run test:e2e
 # test coverage
 $ npm run test:cov
 ```
+## Docker 
+
+You can run the app in docker container
+
+Build
+```bash
+docker build -t passes-generator .
+```
+
+Run
+```bash
+docker run -d -p 3033:3033 --name passes-generator passes-generator
+```
 
 ## Support
 
