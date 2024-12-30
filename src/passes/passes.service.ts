@@ -134,6 +134,7 @@ export class PassesService {
     try {
       const templatePass = await passTemplate({
         logoText: data.typeName.toUpperCase(),
+        expirationDate: new Date(data.endDate).toISOString(),
         generic: {
           headerFields: [{
             "key": "subscriptionType",
