@@ -133,47 +133,48 @@ export class PassesService {
     console.log('data', data)
     try {
       const templatePass = await passTemplate({
+        logoText: data.typeName.toUpperCase(),
         generic: {
-        headerFields: [{
-          "key": "subscriptionType",
-          "label": "Тип",
-          "value": "Test",
-        }],
-        primaryFields: [
-          {
-            "key": "endDate",
-            "label": "Дійсний до",
-            "value": format(data.endDate, 'dd-M-y'),
-          }
-        ],
-        "secondaryFields": [
-          {
-            "key": "number",
-            "label": "Номер",
-            "value": data.number,
-          },
-          {
-            "key": "startDate",
-            "label": "Дата придбання",
-            "value": format(data.startDate, 'dd-M-y'),
-            "textAlignment": "PKTextAlignmentRight"
-          }
-        ],
-        "auxiliaryFields": [
-          {
-            "key": "price",
-            "label": "Вартість",
-            "value": `${data.price} UAH`
-          },
-          {
-            "key": "organization",
-            "label": "Організація",
-            "value": "КП Дніпровський ЕДМР",
-            "textAlignment": "PKTextAlignmentRight"
-          }
-        ]
-      }
-    });
+          headerFields: [{
+            "key": "subscriptionType",
+            "label": "Тип",
+            "value": `${data.typePeriod}`,
+          }],
+          primaryFields: [
+            {
+              "key": "endDate",
+              "label": "Дійсний до",
+              "value": format(data.endDate, 'dd-M-y'),
+            }
+          ],
+          "secondaryFields": [
+            {
+              "key": "number",
+              "label": "Номер",
+              "value": data.number,
+            },
+            {
+              "key": "startDate",
+              "label": "Дата придбання",
+              "value": format(data.startDate, 'dd-M-y'),
+              "textAlignment": "PKTextAlignmentRight"
+            }
+          ],
+          "auxiliaryFields": [
+            {
+              "key": "price",
+              "label": "Вартість",
+              "value": `${data.price} UAH`
+            },
+            {
+              "key": "organization",
+              "label": "Організація",
+              "value": "КП Дніпровський ЕДМР",
+              "textAlignment": "PKTextAlignmentRight"
+            }
+          ]
+        }
+      });
 
       const pass = await PKPass.from(
         templatePass,

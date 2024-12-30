@@ -10,4 +10,6 @@ export type SubscriptionPassCreateData = {
   endDate: string;
   number: string;
   price: string;
+  typePeriod: string;
+  typeName: string;
 }
