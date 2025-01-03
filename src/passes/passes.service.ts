@@ -5,8 +5,11 @@ import * as path from 'path';
 import { promises as fs } from 'node:fs';
 import { PKPass } from 'passkit-generator';
 import * as Utils from 'passkit-generator/lib/utils';
-import {CreatePassBody, SubscriptionPassCreateData} from "./passes.types";
-import {format} from "date-fns/format";
+import {
+  PassQueryParams,
+  PassTypeEnum,
+} from "./passes.types";
+import {getTransportPass} from "./passModels/models/transportPass";
 
 function deepMerge(target, source) {
   for (const key in source) {
@@ -127,62 +130,31 @@ const passTemplate = (mergePassObj?: object) => new Promise<PKPass>(async (resol
   );
 });
 
+const passesFns = {
+  [PassTypeEnum.TRANSPORT_SUBSCRIPTION]: getTransportPass,
+  [PassTypeEnum.TRANSPORT_TICKET]: getTransportPass,
+};
+
 @Injectable()
 export class PassesService {
-  async createTransportSubscriptionPass(data: SubscriptionPassCreateData): Promise<PKPass> {
-    console.log('data', data)
+  async createPass(params: PassQueryParams): Promise<PKPass | null> {
+    console.log('data:', params)
+
+    if (!PassTypeEnum[params.type]) {
+      throw new Error(`This type is not available`);
+    }
+
     try {
-      const templatePass = await passTemplate({
-        generic: {
-        headerFields: [{
-          "key": "subscriptionType",
-          "label": "Тип",
-          "value": "Test",
-        }],
-        primaryFields: [
-          {
-            "key": "endDate",
-            "label": "Дійсний до",
-            "value": format(data.endDate, 'dd-M-y'),
-          }
-        ],
-        "secondaryFields": [
-          {
-            "key": "number",
-            "label": "Номер",
-            "value": data.number,
-          },
-          {
-            "key": "startDate",
-            "label": "Дата придбання",
-            "value": format(data.startDate, 'dd-M-y'),
-            "textAlignment": "PKTextAlignmentRight"
-          }
-        ],
-        "auxiliaryFields": [
-          {
-            "key": "price",
-            "label": "Вартість",
-            "value": `${data.price} UAH`
-          },
-          {
-            "key": "organization",
-            "label": "Організація",
-            "value": "КП Дніпровський ЕДМР",
-            "textAlignment": "PKTextAlignmentRight"
-          }
-        ]
-      }
-    });
+      const mergePassObj = passesFns[params.type](params);
+      console.log('mergePassObj:', mergePassObj);
+      const templatePass = await passTemplate(mergePassObj);
 
       const pass = await PKPass.from(
         templatePass,
         {
-          serialNumber: data.id,
+          serialNumber: params.id,
         }
       );
-
-      pass.setRelevantDate(new Date(data.endDate));
 
       if (pass.type === 'boardingPass' && !pass.transitType) {
         // Just to not make crash the creation if we use a boardingPass
@@ -190,43 +162,10 @@ export class PassesService {
       }
 
       pass.setBarcodes({
-        message: data.id,
+        message: params.id,
         format: 'PKBarcodeFormatQR',
         messageEncoding: 'iso-8859-1',
       });
-
-      return pass;
-    } catch (error) {
-      throw new Error(`Failed to create pass: ${error.message}`);
-    }
-  }
-  async createPass(request): Promise<PKPass> {
-    try {
-      const templatePass = await passTemplate();
-
-      const pass = await PKPass.from(
-        templatePass,
-        request.body || request.params || request.query,
-      );
-
-      if (pass.type === 'boardingPass' && !pass.transitType) {
-        // Just to not make crash the creation if we use a boardingPass
-        pass.transitType = 'PKTransitTypeAir';
-      }
-
-      if (request?.query?.plate) {
-        // auto plate number from params
-        pass.auxiliaryFields[0].value = request?.query?.plate.toString();
-        pass.props.serialNumber = request?.query?.plate.toString();
-        pass.setBarcodes({
-          message: request?.query?.plate.toString(),
-          format: 'PKBarcodeFormatQR',
-          messageEncoding: 'iso-8859-1',
-        });
-      }
-
-      // auto plate number
-      // pass.auxiliaryFields[1].value = 'квартал';
 
       return pass;
     } catch (error) {

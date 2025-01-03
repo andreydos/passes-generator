@@ -1,15 +1,15 @@
-import {Body, Controller, Post, Req, Res} from '@nestjs/common';
+import {Controller, Get, Query, Req, Res} from '@nestjs/common';
 import { PassesService } from './passes.service';
-import {CreatePassBody} from "./passes.types";
+import {PassQueryParams} from "./passes.types";
 import {Request, Response} from "express";
 
 @Controller('passes')
 export class PassesController {
   constructor(private readonly passesService: PassesService) {}
 
-  @Post('create')
+  @Get('pass')
   async createPass(
-    @Body() body: CreatePassBody,
+    @Query() query: PassQueryParams,
     @Req() request: Request,
     @Res() response: Response,
   ) {
@@ -20,17 +20,17 @@ export class PassesController {
       new Date().toISOString().split('T')[0];
 
     try {
-      if (body.type === 'SUBSCRIPTION') {
-        pass = await this.passesService.createTransportSubscriptionPass(body.data);
-      } else {
+        pass = await this.passesService.createPass(query);
+
+      if (!pass) {
         response.status(400);
-        response.statusMessage = 'Type must be: SUBSCRIPTION';
+        response.statusMessage = 'The pass wasn\'t generated. Please check query parameters.';
 
         response.set({
           'Content-type': 'application/json',
         });
 
-        response.send('Type must be: SUBSCRIPTION');
+        response.send();
 
         return;
       }
