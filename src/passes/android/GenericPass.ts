@@ -44,7 +44,7 @@ export default class GenericPass {
      * variable: GOOGLE_APPLICATION_CREDENTIALS.
      */
     // this.keyFilePath = process.env.GOOGLE_APPLICATION_CREDENTIALS || './key.json';
-    this.keyFilePath = path.resolve(__dirname, '../../../src/certificates/niam-niam-google-wallet.json');
+    this.keyFilePath = path.resolve(__dirname, '../../../src/certificates/google-wallet-key.json');
     console.log('this.keyFilePath', this.keyFilePath)
     this.auth();
   }
