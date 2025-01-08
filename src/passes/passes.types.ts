@@ -5,6 +5,8 @@ export type PassQueryParams = {
 export enum PassTypeEnum {
   TRANSPORT_SUBSCRIPTION = 'TRANSPORT_SUBSCRIPTION',
   TRANSPORT_TICKET = 'TRANSPORT_TICKET',
+  PARKING_TICKET = 'PARKING_TICKET',
+  PARKING_SUBSCRIPTION = 'PARKING_SUBSCRIPTION',
 }
 
 export type TransportPassData = {

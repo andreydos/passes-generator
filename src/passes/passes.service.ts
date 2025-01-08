@@ -10,6 +10,7 @@ import {
   PassTypeEnum,
 } from "./passes.types";
 import {getTransportPass} from "./passModels/models/transportPass";
+import GenericPass from "./android/GenericPass";
 
 function deepMerge(target, source) {
   for (const key in source) {
@@ -135,8 +136,26 @@ const passesFns = {
   [PassTypeEnum.TRANSPORT_TICKET]: getTransportPass,
 };
 
+
 @Injectable()
 export class PassesService {
+
+  genericPass: GenericPass;
+
+  constructor() {
+    this.genericPass = new GenericPass();
+  }
+
+  async getAndroidPass(params: PassQueryParams) {
+    const issuer_id = '3388000000022825706';
+    const class_suffix = (process.env.WALLET_CLASS_SUFFIX || 'class_' + params.type);
+    const object_suffix = (process.env.WALLET_OBJECT_SUFFIX || 'object_' + params.type) + Date.now();
+
+    // await this.genericPass.createClass(issuerId, classSuffix);
+    // await this.genericPass.createObject(issuerId, classSuffix, objectSuffix);
+    return this.genericPass.createJwtNewObjects(issuer_id, class_suffix, object_suffix, params)
+  }
+
   async createPass(params: PassQueryParams): Promise<PKPass | null> {
     console.log('data:', params)
 
