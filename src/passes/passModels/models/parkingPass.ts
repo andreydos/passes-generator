@@ -1,4 +1,4 @@
-import {PassQueryParams, PassTypeEnum} from "../../passes.types";
+import {PassQueryParams} from "../../passes.types";
 import {format} from "date-fns/format";
 
 export const getParkingSubscriptionPass = (data: PassQueryParams) => {

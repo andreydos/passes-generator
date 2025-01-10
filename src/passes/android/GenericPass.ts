@@ -18,10 +18,11 @@
 // [START imports]
 
 import {walletobjects_v1} from "googleapis";
-import Walletobjects = walletobjects_v1.Walletobjects;
 import * as path from "path";
 import TransportSubscriptionObject from "./generic/class/TransportSubscriptionObject";
-import {PassQueryParams} from "../passes.types";
+import {PassQueryParams, PassTypeEnum} from "../passes.types";
+import Walletobjects = walletobjects_v1.Walletobjects;
+import ParkingSubscriptionObject from "./generic/class/ParkingSubscriptionObject";
 
 const { google,  } = require('googleapis');
 const jwt = require('jsonwebtoken');
@@ -572,11 +573,20 @@ export default class GenericPass {
   createJwtNewObjects(issuerId, classSuffix, objectSuffix, params: PassQueryParams) {
     // See link below for more information on required properties
     // https://developers.google.com/wallet/generic/rest/v1/genericclass
-    let newClass = TransportSubscriptionObject.getClass(`${issuerId}.${classSuffix}`);
 
-    // See link below for more information on required properties
-    // https://developers.google.com/wallet/generic/rest/v1/genericobject
-    let newObject = TransportSubscriptionObject.getObject(`${issuerId}.${objectSuffix}`, newClass.id, params);
+    let newClass, newObject;
+    if (params.type === PassTypeEnum.TRANSPORT_SUBSCRIPTION) {
+      newClass = TransportSubscriptionObject.getClass(`${issuerId}.${classSuffix}`);
+      // See link below for more information on required properties
+      // https://developers.google.com/wallet/generic/rest/v1/genericobject
+      newObject = TransportSubscriptionObject.getObject(`${issuerId}.${objectSuffix}`, newClass.id, params);
+    } else if (params.type === PassTypeEnum.TRANSPORT_TICKET) {
+      newClass = TransportSubscriptionObject.getClass(`${issuerId}.${classSuffix}`);
+      newObject = TransportSubscriptionObject.getObject(`${issuerId}.${objectSuffix}`, newClass.id, params);
+    } else if (params.type === PassTypeEnum.PARKING_SUBSCRIPTION) {
+      newClass = ParkingSubscriptionObject.getClass(`${issuerId}.${classSuffix}`);
+      newObject = ParkingSubscriptionObject.getObject(`${issuerId}.${objectSuffix}`, newClass.id, params);
+    }
 
     // Create the JWT claims
     let claims = {

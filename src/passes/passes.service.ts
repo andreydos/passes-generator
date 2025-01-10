@@ -11,7 +11,7 @@ import {
 } from "./passes.types";
 import {getTransportPass} from "./passModels/models/transportPass";
 import GenericPass from "./android/GenericPass";
-import {getParkingSubscriptionPass} from "./passModels/models/subscriptionPass";
+import {getParkingSubscriptionPass} from "./passModels/models/parkingPass";
 
 function deepMerge(target, source) {
   for (const key in source) {
@@ -149,6 +149,10 @@ export class PassesService {
   }
 
   async getAndroidPass(params: PassQueryParams) {
+    if (!PassTypeEnum[params.type]) {
+      throw new Error(`This type is not available`);
+    }
+
     const issuer_id = process.env.ISSUER_ID;
     const class_suffix = (process.env.WALLET_CLASS_SUFFIX + params.type);
     const object_suffix = (process.env.WALLET_OBJECT_SUFFIX + params.type) + Date.now();
@@ -168,10 +172,10 @@ export class PassesService {
     try {
       const mergePassObj = passesFns[params.type](params);
 
-      if (!mergePassObj) {
-        console.error('There is no pass type: ', params.type);
-        return;
-      }
+      // if (!mergePassObj) {
+      //   console.error('There is no pass type: ', params.type);
+      //   return;
+      // }
       console.log('mergePassObj:', mergePassObj);
       const templatePass = await passTemplate(mergePassObj);
 
