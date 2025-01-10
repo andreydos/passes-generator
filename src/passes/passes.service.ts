@@ -10,6 +10,8 @@ import {
   PassTypeEnum,
 } from "./passes.types";
 import {getTransportPass} from "./passModels/models/transportPass";
+import GenericPass from "./android/GenericPass";
+import {getParkingSubscriptionPass} from "./passModels/models/parkingPass";
 
 function deepMerge(target, source) {
   for (const key in source) {
@@ -133,10 +135,33 @@ const passTemplate = (mergePassObj?: object) => new Promise<PKPass>(async (resol
 const passesFns = {
   [PassTypeEnum.TRANSPORT_SUBSCRIPTION]: getTransportPass,
   [PassTypeEnum.TRANSPORT_TICKET]: getTransportPass,
+  [PassTypeEnum.PARKING_SUBSCRIPTION]: getParkingSubscriptionPass,
 };
+
 
 @Injectable()
 export class PassesService {
+
+  genericPass: GenericPass;
+
+  constructor() {
+    this.genericPass = new GenericPass();
+  }
+
+  async getAndroidPass(params: PassQueryParams) {
+    if (!PassTypeEnum[params.type]) {
+      throw new Error(`This type is not available`);
+    }
+
+    const issuer_id = process.env.ISSUER_ID;
+    const class_suffix = (process.env.WALLET_CLASS_SUFFIX + params.type);
+    const object_suffix = (process.env.WALLET_OBJECT_SUFFIX + params.type) + Date.now();
+
+    // await this.genericPass.createClass(issuerId, classSuffix);
+    // await this.genericPass.createObject(issuerId, classSuffix, objectSuffix);
+    return this.genericPass.createJwtNewObjects(issuer_id, class_suffix, object_suffix, params)
+  }
+
   async createPass(params: PassQueryParams): Promise<PKPass | null> {
     console.log('data:', params)
 
@@ -146,6 +171,11 @@ export class PassesService {
 
     try {
       const mergePassObj = passesFns[params.type](params);
+
+      // if (!mergePassObj) {
+      //   console.error('There is no pass type: ', params.type);
+      //   return;
+      // }
       console.log('mergePassObj:', mergePassObj);
       const templatePass = await passTemplate(mergePassObj);
 
@@ -160,12 +190,6 @@ export class PassesService {
         // Just to not make crash the creation if we use a boardingPass
         pass.transitType = 'PKTransitTypeAir';
       }
-
-      pass.setBarcodes({
-        message: params.id,
-        format: 'PKBarcodeFormatQR',
-        messageEncoding: 'iso-8859-1',
-      });
 
       return pass;
     } catch (error) {
