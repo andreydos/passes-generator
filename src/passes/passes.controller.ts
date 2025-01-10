@@ -7,7 +7,7 @@ import {Request, Response} from "express";
 export class PassesController {
   constructor(private readonly passesService: PassesService) {}
 
-  @Get('android')
+  @Get('google')
   async android(
     @Query() query: PassQueryParams,
   ) {
@@ -15,7 +15,7 @@ export class PassesController {
     return this.passesService.getAndroidPass(query);
   }
 
-  @Get('pass')
+  @Get('apple')
   async createPass(
     @Query() query: PassQueryParams,
     @Req() request: Request,

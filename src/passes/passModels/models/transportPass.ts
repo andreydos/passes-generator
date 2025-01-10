@@ -19,6 +19,11 @@ export const getTransportPass = (data: PassQueryParams) => {
       "label": "Тип",
       "value": `${data.typePeriod}`,
     }],
+    barcodes: [{
+      message: data.id,
+      format: 'PKBarcodeFormatQR',
+      messageEncoding: 'iso-8859-1',
+    }],
     primaryFields: [
       {
         "key": "endDate",

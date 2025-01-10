@@ -43,9 +43,7 @@ export default class GenericPass {
      * Path to service account key file from Google Cloud Console. Environment
      * variable: GOOGLE_APPLICATION_CREDENTIALS.
      */
-    // this.keyFilePath = process.env.GOOGLE_APPLICATION_CREDENTIALS || './key.json';
-    this.keyFilePath = path.resolve(__dirname, '../../../src/certificates/google-wallet-key.json');
-    console.log('this.keyFilePath', this.keyFilePath)
+    this.keyFilePath = path.resolve(process.cwd(), `${process.env.GOOGLE_APPLICATION_CREDENTIALS}`);
     this.auth();
   }
   // [END setup]

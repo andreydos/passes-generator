@@ -11,10 +11,20 @@ export enum PassTypeEnum {
 
 export type TransportPassData = {
   id: string;
-  startDate: string;
-  endDate: string;
-  number: string;
-  price: string;
-  typePeriod: string;
-  typeName: string;
+  startDate?: string;
+  endDate?: string;
+  number?: string;
+  price?: string;
+  typePeriod?: string;
+  typeName?: string;
+}
+
+export type ParkingPassData = {
+  id: string;
+  startDate?: string;
+  endDate?: string;
+  number?: string;
+  price?: string;
+  typePeriod?: string;
+  typeName?: string;
 }
