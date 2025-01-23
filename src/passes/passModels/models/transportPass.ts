@@ -1,14 +1,15 @@
 import {format} from "date-fns/format";
 import {PassQueryParams, PassTypeEnum} from "../../passes.types";
+import {dateFormat, dateTimeFormat} from "../../android/generic/class/config";
 
 export const getTransportPass = (data: PassQueryParams) => {
   const startDate = data.type === PassTypeEnum.TRANSPORT_SUBSCRIPTION
-    ? format(data.startDate, 'dd-M-y')
-    : format(data.startDate, 'dd-M-y HH:mm');
+    ? format(data.startDate, dateFormat)
+    : format(data.startDate, dateTimeFormat);
 
   const endDate = data.type === PassTypeEnum.TRANSPORT_SUBSCRIPTION
-    ? format(data.endDate, 'dd-M-y')
-    : format(data.endDate, 'dd-M-y HH:mm');
+    ? format(data.endDate, dateFormat)
+    : format(data.endDate, dateTimeFormat);
 
   return {
     logoText: data.typeName.toUpperCase(),
