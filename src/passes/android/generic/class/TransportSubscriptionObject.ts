@@ -1,5 +1,6 @@
 import {PassTypeEnum} from "../../../passes.types";
 import {format} from "date-fns/format";
+import {dateFormat, dateTimeFormat} from "./config";
 
 export default class TransportSubscriptionObject {
   static getClass(id) {
@@ -82,12 +83,12 @@ export default class TransportSubscriptionObject {
 
   static getObject(id, classId, params) {
     const startDate = params.type === PassTypeEnum.TRANSPORT_SUBSCRIPTION
-      ? format(params.startDate, 'dd-M-y')
-      : format(params.startDate, 'dd-M-y HH:mm');
+      ? format(params.startDate, dateFormat)
+      : format(params.startDate, dateTimeFormat);
 
     const endDate = params.type === PassTypeEnum.TRANSPORT_SUBSCRIPTION
-      ? format(params.endDate, 'dd-M-y')
-      : format(params.endDate, 'dd-M-y HH:mm');
+      ? format(params.endDate, dateFormat)
+      : format(params.endDate, dateTimeFormat);
     return  {
       'id': id,
       'classId': classId,

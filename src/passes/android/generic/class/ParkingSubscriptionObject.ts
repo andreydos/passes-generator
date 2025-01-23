@@ -1,5 +1,5 @@
-import {PassTypeEnum} from "../../../passes.types";
 import {format} from "date-fns/format";
+import {dateFormat} from "./config";
 
 export default class ParkingSubscriptionObject {
   static getClass(id) {
@@ -81,8 +81,8 @@ export default class ParkingSubscriptionObject {
   }
 
   static getObject(id, classId, params) {
-    const startDate = format(params.startDate, 'dd-M-y');
-    const endDate = format(params.endDate, 'dd-M-y');
+    const startDate = format(params.startDate, dateFormat);
+    const endDate = format(params.endDate, dateFormat);
 
     return  {
       'id': id,

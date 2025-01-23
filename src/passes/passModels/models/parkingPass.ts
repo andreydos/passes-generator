@@ -1,9 +1,10 @@
 import {PassQueryParams} from "../../passes.types";
 import {format} from "date-fns/format";
+import {dateFormat} from "../../android/generic/class/config";
 
 export const getParkingSubscriptionPass = (data: PassQueryParams) => {
-  const startDate = format(data.startDate, 'dd-M-y');
-  const endDate = format(data.endDate, 'dd-M-y');
+  const startDate = format(data.startDate, dateFormat);
+  const endDate = format(data.endDate, dateFormat);
 
   return {
     logoText: data.typeName.toUpperCase(),
