@@ -170,7 +170,7 @@ export default class TransportSubscriptionObject {
       'cardTitle': {
         'defaultValue': {
           'language': 'en-US',
-          'value': 'Абонимент'
+          'value': 'Проїзний'
         }
       },
       'header': {
