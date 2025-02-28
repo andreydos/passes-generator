@@ -1,5 +1,6 @@
 import {format} from "date-fns/format";
 import {dateFormat} from "./config";
+import {fromZonedTime} from "date-fns-tz";
 
 export default class ParkingSubscriptionObject {
   static getClass(id) {
@@ -81,8 +82,13 @@ export default class ParkingSubscriptionObject {
   }
 
   static getObject(id, classId, params) {
-    const startDate = format(params.startDate, dateFormat);
-    const endDate = format(params.endDate, dateFormat);
+    const startDateTz = fromZonedTime(params.startDate, 'Europe/Kiev')
+    const endDateTz = fromZonedTime(params.endDate, 'Europe/Kiev')
+
+    const startDate = format(startDateTz, dateFormat);
+    const endDate = format(endDateTz, dateFormat);
+
+
 
     return  {
       'id': id,

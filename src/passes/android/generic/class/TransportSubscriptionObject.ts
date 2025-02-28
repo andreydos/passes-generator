@@ -1,6 +1,7 @@
 import {PassTypeEnum} from "../../../passes.types";
 import {format} from "date-fns/format";
 import {dateFormat, dateTimeFormat} from "./config";
+import {fromZonedTime} from "date-fns-tz";
 
 export default class TransportSubscriptionObject {
   static getClass(id) {
@@ -82,13 +83,16 @@ export default class TransportSubscriptionObject {
   }
 
   static getObject(id, classId, params) {
+    const startDateTz = fromZonedTime(params.startDate, 'Europe/Kiev')
     const startDate = params.type === PassTypeEnum.TRANSPORT_SUBSCRIPTION
-      ? format(params.startDate, dateFormat)
-      : format(params.startDate, dateTimeFormat);
+      ? format(startDateTz, dateFormat)
+      : format(startDateTz, dateTimeFormat);
 
+    const endDateTz = fromZonedTime(params.endDate, 'Europe/Kiev')
     const endDate = params.type === PassTypeEnum.TRANSPORT_SUBSCRIPTION
-      ? format(params.endDate, dateFormat)
-      : format(params.endDate, dateTimeFormat);
+      ? format(endDateTz, dateFormat)
+      : format(endDateTz, dateTimeFormat);
+
     return  {
       'id': id,
       'classId': classId,

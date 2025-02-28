@@ -1,19 +1,22 @@
+import {fromZonedTime} from 'date-fns-tz';
 import {format} from "date-fns/format";
 import {PassQueryParams, PassTypeEnum} from "../../passes.types";
 import {dateFormat, dateTimeFormat} from "../../android/generic/class/config";
 
 export const getTransportPass = (data: PassQueryParams) => {
+  const startDateTz = fromZonedTime(data.startDate, 'Europe/Kiev')
   const startDate = data.type === PassTypeEnum.TRANSPORT_SUBSCRIPTION
-    ? format(data.startDate, dateFormat)
-    : format(data.startDate, dateTimeFormat);
+    ? format(startDateTz, dateFormat)
+    : format(startDateTz, dateTimeFormat);
 
+  const endDateTz = fromZonedTime(data.endDate, 'Europe/Kiev')
   const endDate = data.type === PassTypeEnum.TRANSPORT_SUBSCRIPTION
-    ? format(data.endDate, dateFormat)
-    : format(data.endDate, dateTimeFormat);
+    ? format(endDateTz, dateFormat)
+    : format(endDateTz, dateTimeFormat);
 
   return {
     logoText: data.typeName.toUpperCase(),
-      expirationDate: new Date(data.endDate).toISOString(),
+      expirationDate: new Date(endDateTz).toISOString(),
     generic: {
     headerFields: [{
       "key": "subscriptionType",
