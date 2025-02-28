@@ -13,7 +13,8 @@ export const getParkingSubscriptionPass = (data: PassQueryParams) => {
 
   return {
     logoText: data.typeName.toUpperCase(),
-    expirationDate: new Date(endDate).toISOString(),
+    expirationDate: new Date(endDateTz).toISOString(),
+    description: 'Парковка',
     generic: {
       headerFields: [{
         "key": "subscriptionType",

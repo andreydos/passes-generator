@@ -4,6 +4,7 @@ import {PassQueryParams, PassTypeEnum} from "../../passes.types";
 import {dateFormat, dateTimeFormat} from "../../android/generic/class/config";
 
 export const getTransportPass = (data: PassQueryParams) => {
+  const description = data.type === PassTypeEnum.TRANSPORT_SUBSCRIPTION ? 'Проїзний' : 'Квиток';
   const startDateTz = fromZonedTime(data.startDate, 'Europe/Kiev')
   const startDate = data.type === PassTypeEnum.TRANSPORT_SUBSCRIPTION
     ? format(startDateTz, dateFormat)
@@ -17,6 +18,7 @@ export const getTransportPass = (data: PassQueryParams) => {
   return {
     logoText: data.typeName.toUpperCase(),
       expirationDate: new Date(endDateTz).toISOString(),
+    description: description,
     generic: {
     headerFields: [{
       "key": "subscriptionType",
