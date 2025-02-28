@@ -1,14 +1,19 @@
 import {PassQueryParams} from "../../passes.types";
 import {format} from "date-fns/format";
 import {dateFormat} from "../../android/generic/class/config";
+import {fromZonedTime} from "date-fns-tz";
 
 export const getParkingSubscriptionPass = (data: PassQueryParams) => {
-  const startDate = format(data.startDate, dateFormat);
-  const endDate = format(data.endDate, dateFormat);
+
+  const startDateTz = fromZonedTime(data.startDate, 'Europe/Kiev')
+  const endDateTz = fromZonedTime(data.endDate, 'Europe/Kiev')
+
+  const startDate = format(startDateTz, dateFormat);
+  const endDate = format(endDateTz, dateFormat);
 
   return {
     logoText: data.typeName.toUpperCase(),
-    expirationDate: new Date(data.endDate).toISOString(),
+    expirationDate: new Date(endDate).toISOString(),
     generic: {
       headerFields: [{
         "key": "subscriptionType",
