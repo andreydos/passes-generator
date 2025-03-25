@@ -17,6 +17,7 @@ export type TransportPassData = {
   price?: string;
   typePeriod?: string;
   typeName?: string;
+  bortNumber?: string;
 }
 
 export type ParkingPassData = {
