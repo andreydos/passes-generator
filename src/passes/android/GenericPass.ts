@@ -23,6 +23,7 @@ import TransportSubscriptionObject from "./generic/class/TransportSubscriptionOb
 import {PassQueryParams, PassTypeEnum} from "../passes.types";
 import Walletobjects = walletobjects_v1.Walletobjects;
 import ParkingSubscriptionObject from "./generic/class/ParkingSubscriptionObject";
+import TransportTicketObject from "./generic/class/TransportTicketObject";
 
 const { google,  } = require('googleapis');
 const jwt = require('jsonwebtoken');
@@ -581,8 +582,8 @@ export default class GenericPass {
       // https://developers.google.com/wallet/generic/rest/v1/genericobject
       newObject = TransportSubscriptionObject.getObject(`${issuerId}.${objectSuffix}`, newClass.id, params);
     } else if (params.type === PassTypeEnum.TRANSPORT_TICKET) {
-      newClass = TransportSubscriptionObject.getClass(`${issuerId}.${classSuffix}`);
-      newObject = TransportSubscriptionObject.getObject(`${issuerId}.${objectSuffix}`, newClass.id, params);
+      newClass = TransportTicketObject.getClass(`${issuerId}.${classSuffix}`);
+      newObject = TransportTicketObject.getObject(`${issuerId}.${objectSuffix}`, newClass.id, params);
     } else if (params.type === PassTypeEnum.PARKING_SUBSCRIPTION) {
       newClass = ParkingSubscriptionObject.getClass(`${issuerId}.${classSuffix}`);
       newObject = ParkingSubscriptionObject.getObject(`${issuerId}.${objectSuffix}`, newClass.id, params);

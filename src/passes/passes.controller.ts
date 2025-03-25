@@ -8,7 +8,7 @@ export class PassesController {
   constructor(private readonly passesService: PassesService) {}
 
   @Get('google')
-  async android(
+  async getGoogleWalletPass(
     @Query() query: PassQueryParams,
   ) {
     console.log('query:', query)
@@ -16,7 +16,7 @@ export class PassesController {
   }
 
   @Get('apple')
-  async createPass(
+  async getAppleWalletPass(
     @Query() query: PassQueryParams,
     @Req() request: Request,
     @Res() response: Response,

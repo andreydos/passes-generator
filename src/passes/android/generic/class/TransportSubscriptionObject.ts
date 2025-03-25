@@ -1,7 +1,8 @@
 import {PassTypeEnum} from "../../../passes.types";
 import {format} from "date-fns/format";
-import {dateFormat, dateTimeFormat} from "./config";
+import {bgImgUrl, dateFormat, dateTimeFormat, logoUrl} from "./config";
 import {fromZonedTime} from "date-fns-tz";
+import {walletobjects_v1} from "googleapis";
 
 export default class TransportSubscriptionObject {
   static getClass(id) {
@@ -93,18 +94,18 @@ export default class TransportSubscriptionObject {
       ? format(endDateTz, dateFormat)
       : format(endDateTz, dateTimeFormat);
 
-    return  {
+    return {
       'id': id,
       'classId': classId,
       'state': 'ACTIVE',
       'heroImage': {
         'sourceUri': {
-          'uri': 'https://i.ibb.co/QrsmLF6/wallet-bg.png'
+          'uri': bgImgUrl
         },
         'contentDescription': {
           'defaultValue': {
             'language': 'en-US',
-            'value': 'Hero image description'
+            'value': 'Dnipro city'
           }
         }
       },
@@ -117,7 +118,8 @@ export default class TransportSubscriptionObject {
         },
         {
           "id": "field_2",
-          "header": "Номер",
+          // "header": "Номер",
+          "header": "Серія",
           "body": params.number,
         },
         {
@@ -183,10 +185,16 @@ export default class TransportSubscriptionObject {
           'value': params.typeName,
         }
       },
+      // 'subheader': {
+      //   'defaultValue': {
+      //     'language': 'en-US',
+      //     'value': 'КП Дніпровський електротранспорт ДМР',
+      //   },
+      // },
       'hexBackgroundColor': '#1E3A88',
       'logo': {
         'sourceUri': {
-          'uri': 'https://i.ibb.co/9q2cKyp/e-Dnipro-logo.png'
+          'uri': logoUrl
         },
         'contentDescription': {
           'defaultValue': {
@@ -195,6 +203,6 @@ export default class TransportSubscriptionObject {
           }
         }
       }
-    }
+    } as walletobjects_v1.Schema$GenericObject
   }
 }

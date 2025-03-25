@@ -12,10 +12,10 @@ export const getParkingSubscriptionPass = (data: PassQueryParams) => {
   const endDate = format(endDateTz, dateFormat);
 
   return {
-    logoText: data.typeName.toUpperCase(),
+    logoText: 'Парковка',
     expirationDate: new Date(endDateTz).toISOString(),
     description: 'Парковка',
-    generic: {
+    eventTicket: {
       headerFields: [{
         "key": "subscriptionType",
         "label": "Тип",
@@ -30,16 +30,11 @@ export const getParkingSubscriptionPass = (data: PassQueryParams) => {
       ],
       "secondaryFields": [
         {
-          "key": "number",
-          "label": "Номер",
-          "value": data.number,
-        },
-        {
           "key": "startDate",
           "label": "Дата придбання",
           "value": startDate,
-          "textAlignment": "PKTextAlignmentRight"
-        }
+          // "textAlignment": "PKTextAlignmentRight"
+        },
       ],
       "auxiliaryFields": [
         // {
@@ -48,11 +43,18 @@ export const getParkingSubscriptionPass = (data: PassQueryParams) => {
         //   "value": `${data.price} UAH`
         // },
         {
+          "row": 0,
+          "key": "number",
+          "label": "Номер",
+          "value": data.number,
+        },
+        {
+          "row": 1,
           "key": "organization",
           "label": "Організація",
-          "value": "КП Дніпровський ЕДМР",
+          "value": "КП Дніпровський електротранспорт ДМР",
           // "textAlignment": "PKTextAlignmentRight"
-        }
+        },
       ]
     }
   }
