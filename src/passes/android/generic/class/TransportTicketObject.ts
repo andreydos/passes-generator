@@ -1,6 +1,6 @@
 import {PassTypeEnum} from "../../../passes.types";
 import {format} from "date-fns/format";
-import {bgImgUrl, dateFormat, dateTimeFormat, logoUrl} from "./config";
+import {bgImgUrl, dateFormat, dateTimeFormat, logoUrl, transportTypeName} from "./config";
 import {fromZonedTime} from "date-fns-tz";
 import {walletobjects_v1} from "googleapis";
 
@@ -152,7 +152,7 @@ export default class TransportTicketObject {
       'header': {
         'defaultValue': {
           'language': 'en-US',
-          'value': params.typeName,
+          'value': transportTypeName[params.transportType],
         }
       },
       'hexBackgroundColor': '#1E3A88',
