@@ -9,7 +9,7 @@ import {
   PassQueryParams,
   PassTypeEnum,
 } from "./passes.types";
-import {getTransportPass} from "./passModels/models/transportPass";
+import {getTransportSubscriptionPass, getTransportTicketPass} from "./passModels/models/transportPass";
 import GenericPass from "./android/GenericPass";
 import {getParkingSubscriptionPass} from "./passModels/models/parkingPass";
 
@@ -133,8 +133,8 @@ const passTemplate = (mergePassObj?: object) => new Promise<PKPass>(async (resol
 });
 
 const passesFns = {
-  [PassTypeEnum.TRANSPORT_SUBSCRIPTION]: getTransportPass,
-  [PassTypeEnum.TRANSPORT_TICKET]: getTransportPass,
+  [PassTypeEnum.TRANSPORT_SUBSCRIPTION]: getTransportSubscriptionPass,
+  [PassTypeEnum.TRANSPORT_TICKET]: getTransportTicketPass,
   [PassTypeEnum.PARKING_SUBSCRIPTION]: getParkingSubscriptionPass,
 };
 

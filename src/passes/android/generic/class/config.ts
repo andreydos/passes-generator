@@ -7,3 +7,4 @@ export const transportTypeName = {
   trol: 'Тролейбус',
   tram: 'Трамвай',
 }
+export const organization = 'КП Дніпровський електротранспорт ДМР';
