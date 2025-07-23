@@ -1,6 +1,6 @@
 import {PassTypeEnum} from "../../../passes.types";
 import {format} from "date-fns/format";
-import {bgImgUrl, dateFormat, dateTimeFormat, logoUrl, transportTypeName} from "./config";
+import {bgImgUrl, dateFormat, dateTimeFormat, logoUrl, organization, transportTypeName} from "./config";
 import {fromZonedTime} from "date-fns-tz";
 import {walletobjects_v1} from "googleapis";
 
@@ -135,7 +135,7 @@ export default class TransportTicketObject {
         {
           "id": "field_5",
           "header": "Організація",
-          "body":  "КП Дніпровський електротранспорт ДМР",
+          "body": params.companyName || organization,
         },
         {
           "id": "field_6",
