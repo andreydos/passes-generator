@@ -19,6 +19,7 @@ export type TransportPassData = {
   typeName?: string;
   bortNumber?: string;
   transportType: 'tram' | 'trol' | 'bus';
+  companyName: string;
 }
 
 export type ParkingPassData = {

@@ -1,6 +1,6 @@
 import {PassQueryParams} from "../../passes.types";
 import {format} from "date-fns/format";
-import {dateFormat} from "../../android/generic/class/config";
+import {dateFormat, organization} from "../../android/generic/class/config";
 import {fromZonedTime} from "date-fns-tz";
 
 export const getParkingSubscriptionPass = (data: PassQueryParams) => {
@@ -52,7 +52,7 @@ export const getParkingSubscriptionPass = (data: PassQueryParams) => {
           "row": 1,
           "key": "organization",
           "label": "Організація",
-          "value": "КП Дніпровський електротранспорт ДМР",
+          "value": data.companyName || organization,
           // "textAlignment": "PKTextAlignmentRight"
         },
       ]

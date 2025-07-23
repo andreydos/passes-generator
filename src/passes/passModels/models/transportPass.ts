@@ -30,7 +30,7 @@ export const getTransportSubscriptionPass = (data: PassQueryParams) => {
       "row": 1,
       "key": "organization",
       "label": "Організація",
-      "value": organization,
+      "value": data.companyName || organization,
       // "textAlignment": "PKTextAlignmentLeft"
     }
   ];
@@ -110,7 +110,7 @@ export const getTransportTicketPass = (data: PassQueryParams) => {
       "row": 1,
       "key": "organization",
       "label": "Організація",
-      "value": organization,
+      "value": data.companyName || organization,
       // "textAlignment": "PKTextAlignmentLeft"
     }
   ];

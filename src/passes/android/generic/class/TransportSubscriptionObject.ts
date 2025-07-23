@@ -1,6 +1,6 @@
 import {PassTypeEnum} from "../../../passes.types";
 import {format} from "date-fns/format";
-import {bgImgUrl, dateFormat, dateTimeFormat, logoUrl} from "./config";
+import {bgImgUrl, dateFormat, dateTimeFormat, logoUrl, organization} from "./config";
 import {fromZonedTime} from "date-fns-tz";
 import {walletobjects_v1} from "googleapis";
 
@@ -86,12 +86,12 @@ export default class TransportSubscriptionObject {
   static getObject(id, classId, params) {
     const startDateTz = fromZonedTime(params.startDate, 'Europe/Kiev')
     const startDate = params.type === PassTypeEnum.TRANSPORT_SUBSCRIPTION
-      ? format(startDateTz, dateFormat)
+      ? format(startDateTz, dateTimeFormat)
       : format(startDateTz, dateTimeFormat);
 
     const endDateTz = fromZonedTime(params.endDate, 'Europe/Kiev')
     const endDate = params.type === PassTypeEnum.TRANSPORT_SUBSCRIPTION
-      ? format(endDateTz, dateFormat)
+      ? format(endDateTz, dateTimeFormat)
       : format(endDateTz, dateTimeFormat);
 
     return {
@@ -135,7 +135,7 @@ export default class TransportSubscriptionObject {
         {
           "id": "field_5",
           "header": "Організація",
-          "body":  "КП Дніпровський електротранспорт ДМР",
+          "body": params.companyName || organization,
         },
         {
           "id": "field_6",

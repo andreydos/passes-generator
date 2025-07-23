@@ -1,5 +1,5 @@
 import {format} from "date-fns/format";
-import {bgImgUrl, dateFormat, logoUrl} from "./config";
+import {bgImgUrl, dateFormat, logoUrl, organization} from "./config";
 import {fromZonedTime} from "date-fns-tz";
 
 export default class ParkingSubscriptionObject {
@@ -131,7 +131,7 @@ export default class ParkingSubscriptionObject {
         {
           "id": "field_5",
           "header": "Організація",
-          "body":  "КП Дніпровський електротранспорт ДМР",
+          "body": params.companyName || organization,
         },
         {
           "id": "field_4",
